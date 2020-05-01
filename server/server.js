@@ -1,24 +1,43 @@
 const path = require("path");
 const express = require("express");
-const logger = require("morgan");
+const morgan = require("morgan");
 const createError = require("http-errors");
+const mongoose = require("mongoose");
+// const winston = require("./middlewares/winston");
 const app = express();
 
-const PORT = require("../config").server.port;
+// CONFIG
+const config = require("../config");
 
-// Middleware
-app.use(logger("dev"));
+const PORT = config.server.port;
+
+// // Set Environment
+// process.env.NODE_ENV = "production";
+
+// Middlewares
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/", (req, res) => {
-  res.send("Hello.");
+// MongoDB connection
+mongoose.connect(`${config.db.host + config.db.collection}`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+}, (err) => {
+  if (err) throw new Error(err);
+  console.log("MongoDB Connection established...")
 });
+
+// Routes
+app.use("/", require("./routes/index"));
+app.use("/tasks", require("./routes/tasks"));
 
 // Route Not Found
 app.use((req, res, next) => {
-  next(createError(404, "Route does not exist."));
+  next(createError(404, "Route not found."));
 });
 
 // Error Handling
