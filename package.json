@@ -1,12 +1,11 @@
 {
-  "name": "Fractalife",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "fractalife",
+  "version": "0.1.0",
+  "description": "Sort your life.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "setup": "cd server && npm install && cd ../app && npm install"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "keywords": ["Life"],
+  "author": "Aman Kumar",
+  "license": "MIT"
 }
